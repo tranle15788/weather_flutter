@@ -30,13 +30,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool changeDate = false;
-  bool test = false;
 
-  int currentBannerIndex = 7;
+  int currentDayIndex = 7;
 
   void selectDate(int btnTag) {
     setState(() {
-      currentBannerIndex = btnTag;
+      currentDayIndex = btnTag;
     });
   }
 
@@ -45,15 +44,15 @@ class _MyHomePageState extends State<MyHomePage> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
         body: Container(
-      width: width > 600 ? 600 : width,
       color: Colors.white,
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // CarouselSlider
           CarouselSlider.builder(
             options: CarouselOptions(
-              height: 62,
+              height: 66,
               initialPage: 1,
               viewportFraction: 1,
               enableInfiniteScroll: false,
@@ -73,13 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   return GestureDetector(
                       onTap: (() {
                         selectDate(idx);
-                        setState(() {
-                          test = !test;
-                        });
                       }),
                       child: Container(
                           alignment: Alignment.center,
-                          width: width > 600 ? 600 / 7 - 3 : width / 7 - 3,
+                          width: width / 7 - 3,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                                 colors: const [
@@ -87,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Theme.Colors.blueSky,
                                 ],
                                 stops: [
-                                  currentBannerIndex == idx ? 0.0 : 1.0,
+                                  currentDayIndex == idx ? 0.0 : 1.0,
                                   1.0
                                 ],
                                 begin: FractionalOffset.topCenter,
@@ -124,10 +120,12 @@ class _MyHomePageState extends State<MyHomePage> {
             children: List.generate(weathers.length, (index) {
               Weather weather = weathers[index];
               return Container(
-                  child: index == currentBannerIndex
+                  child: index == currentDayIndex
                       ? Column(
                           children: [
+                            // Image Weather
                             Image.asset(weather.imgWeatherStates, width: 70),
+                            // Text Temperature
                             RichText(
                               text: TextSpan(
                                 text: '${weather.temperature}',
@@ -145,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ],
                               ),
                             ),
+                            // Text Weather States
                             Text(
                               weather.weatherStates,
                               style: const TextStyle(
@@ -152,6 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Theme.Colors.blueSky,
                                   fontSize: 30),
                             ),
+                             // Text Date
                             Text(
                               weather.dateMonthYear,
                               style: const TextStyle(
@@ -162,6 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             const SizedBox(
                               height: 20,
                             ),
+                              // Text Humidity Predictability
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -295,9 +296,3 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
   }
 }
-
-
-
-// lí do bỏ const trước
-// gradian
-// StatefulWidget
