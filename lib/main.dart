@@ -1,10 +1,18 @@
+import 'dart:io' show Platform;
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:desktop_window/desktop_window.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mccounting_text/mccounting_text.dart';
 import './data_weather.dart';
 import 'theme.dart' as Theme;
+import 'package:desktop_window/desktop_window.dart' as window_size;
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    window_size.DesktopWindow.setMinWindowSize(Size(375, 667));
+  }
   runApp(const MyApp());
 }
 
@@ -15,14 +23,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      scrollBehavior: MaterialScrollBehavior().copyWith(
-        dragDevices: {
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.touch,
-          PointerDeviceKind.stylus,
-          PointerDeviceKind.unknown
-        },
-      ),
       title: 'Flutter Weather',
       home: MyHomePage(),
     );
@@ -38,6 +38,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool changeDate = false;
   int currentDayIndex = 7;
+  final CarouselController _controller = CarouselController();
 
   void selectDate(int btnTag) {
     setState(() {
@@ -55,69 +56,100 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // CarouselSlider
-          CarouselSlider.builder(
-            options: CarouselOptions(
-              height: 66,
-              initialPage: 1,
-              viewportFraction: 1,
-              enableInfiniteScroll: false,
-            ),
-            itemCount: (weathers.length / 7).round(),
-            itemBuilder: (context, index, realIdx) {
-              int mon = index * 7;
-              int tue = mon + 1;
-              int web = tue + 1;
-              int thu = web + 1;
-              int fri = thu + 1;
-              int sat = fri + 1;
-              int sun = sat + 1;
-              return Row(
-                children: [mon, tue, web, thu, fri, sat, sun].map((idx) {
-                  Weather weather = weathers[idx];
-                  return GestureDetector(
-                      onTap: (() {
-                        selectDate(idx);
-                      }),
-                      child: Container(
-                          alignment: Alignment.center,
-                          width: width / 7 - 3,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                colors: const [
-                                  Theme.Colors.primary,
-                                  Theme.Colors.blueSky,
-                                ],
-                                stops: [
-                                  currentDayIndex == idx ? 0.0 : 1.0,
-                                  1.0
-                                ],
-                                begin: FractionalOffset.topCenter,
-                                end: FractionalOffset.bottomCenter,
-                                tileMode: TileMode.repeated),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 10),
-                          child: Column(children: [
-                            Text(
-                              weather.dayOfTheWeek,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              weather.dateMonth,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14),
-                            ),
-                          ])));
-                }).toList(),
-              );
-            },
+          Stack(
+            children: [
+              // CarouselSlider
+              CarouselSlider.builder(
+                carouselController: _controller,
+                options: CarouselOptions(
+                  height:
+                      Platform.isLinux && Platform.isMacOS && Platform.isWindows
+                          ? 65
+                          : 62,
+                  initialPage: 1,
+                  viewportFraction: 1,
+                  enableInfiniteScroll: false,
+                ),
+                itemCount:
+                    Platform.isLinux && Platform.isMacOS && Platform.isWindows
+                        ? (weathers.length).round()
+                        : (weathers.length / 7).round(),
+                itemBuilder: (context, index, realIdx) {
+                  int mon = index * 7;
+                  int tue = mon + 1;
+                  int web = tue + 1;
+                  int thu = web + 1;
+                  int fri = thu + 1;
+                  int sat = fri + 1;
+                  int sun = sat + 1;
+                  return Row(
+                    children: [mon, tue, web, thu, fri, sat, sun].map((idx) {
+                      Weather weather = weathers[idx];
+                      return GestureDetector(
+                          onTap: (() {
+                            selectDate(idx);
+                          }),
+                          child: Container(
+                              alignment: Alignment.center,
+                              width: width / 7 - 3,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    colors: const [
+                                      Theme.Colors.primary,
+                                      Theme.Colors.blueSky,
+                                    ],
+                                    stops: [
+                                      currentDayIndex == idx ? 0.0 : 1.0,
+                                      1.0
+                                    ],
+                                    begin: FractionalOffset.topCenter,
+                                    end: FractionalOffset.bottomCenter,
+                                    tileMode: TileMode.repeated),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 10),
+                              child: Column(children: [
+                                Text(
+                                  weather.dayOfTheWeek,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: width <= 375 ? 12 : 14),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  weather.dateMonth,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: width <= 375 ? 12 : 14),
+                                ),
+                              ])));
+                    }).toList(),
+                  );
+                },
+              ),
+              Positioned.fill(
+                  child: Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  color: Colors.white,
+                  onPressed: () {
+                    _controller.previousPage();
+                  },
+                ),
+              )),
+              Positioned.fill(
+                  child: Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_forward_ios),
+                  color: Colors.white,
+                  onPressed: () => _controller.nextPage(),
+                ),
+              ))
+            ],
           ),
           const SizedBox(
             height: 20,
