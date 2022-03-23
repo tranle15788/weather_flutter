@@ -129,6 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
+               Platform.isLinux && Platform.isMacOS && Platform.isWindows ? 
               Positioned.fill(
                   child: Align(
                 alignment: Alignment.centerLeft,
@@ -139,8 +140,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     _controller.previousPage();
                   },
                 ),
-              )),
-              Positioned.fill(
+              )): Container(),
+              Platform.isLinux && Platform.isMacOS && Platform.isWindows ? Positioned.fill(
                   child: Align(
                 alignment: Alignment.centerRight,
                 child: IconButton(
@@ -148,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.white,
                   onPressed: () => _controller.nextPage(),
                 ),
-              ))
+              )): Container(),
             ],
           ),
           const SizedBox(
