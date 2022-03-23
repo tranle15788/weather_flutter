@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mccounting_text/mccounting_text.dart';
-import 'package:animate_do/animate_do.dart';
 import './data_weather.dart';
 import 'theme.dart' as Theme;
 
@@ -16,7 +15,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      scrollBehavior: MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown
+        },
+      ),
+      title: 'Flutter Weather',
       home: MyHomePage(),
     );
   }
@@ -30,7 +37,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool changeDate = false;
-
   int currentDayIndex = 7;
 
   void selectDate(int btnTag) {
@@ -151,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Theme.Colors.blueSky,
                                   fontSize: 30),
                             ),
-                             // Text Date
+                            // Text Date
                             Text(
                               weather.dateMonthYear,
                               style: const TextStyle(
@@ -162,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             const SizedBox(
                               height: 20,
                             ),
-                              // Text Humidity Predictability
+                            // Text Humidity Predictability
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -296,3 +302,13 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
   }
 }
+
+// class MyCustomScrollBehavior extends MaterialScrollBehavior {
+//   // Override behavior methods and getters like dragDevices
+//   @override
+//   Set<PointerDeviceKind> get dragDevices => {
+//         PointerDeviceKind.touch,
+//         PointerDeviceKind.mouse,
+//         // etc.
+//       };
+// }
