@@ -129,27 +129,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
-               Platform.isLinux && Platform.isMacOS && Platform.isWindows ? 
-              Positioned.fill(
-                  child: Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  color: Colors.white,
-                  onPressed: () {
-                    _controller.previousPage();
-                  },
-                ),
-              )): Container(),
-              Platform.isLinux && Platform.isMacOS && Platform.isWindows ? Positioned.fill(
-                  child: Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios),
-                  color: Colors.white,
-                  onPressed: () => _controller.nextPage(),
-                ),
-              )): Container(),
+              Platform.isLinux && Platform.isMacOS && Platform.isWindows
+                  ? Positioned.fill(
+                      child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back_ios),
+                        color: Colors.white,
+                        onPressed: () {
+                          _controller.previousPage();
+                        },
+                      ),
+                    ))
+                  : Container(),
+              Platform.isLinux && Platform.isMacOS && Platform.isWindows
+                  ? Positioned.fill(
+                      child: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_forward_ios),
+                        color: Colors.white,
+                        onPressed: () => _controller.nextPage(),
+                      ),
+                    ))
+                  : Container(),
             ],
           ),
           const SizedBox(
@@ -327,7 +330,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             )
                           ],
                         )
-                      : Container());
+                      : const Text(''));
             }),
           ),
         ],
