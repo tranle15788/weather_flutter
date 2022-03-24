@@ -330,7 +330,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             )
                           ],
                         )
-                      : const Text(''));
+                      : Container(height: 0));
             }),
           ),
         ],
@@ -338,13 +338,3 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
   }
 }
-
-// class MyCustomScrollBehavior extends MaterialScrollBehavior {
-//   // Override behavior methods and getters like dragDevices
-//   @override
-//   Set<PointerDeviceKind> get dragDevices => {
-//         PointerDeviceKind.touch,
-//         PointerDeviceKind.mouse,
-//         // etc.
-//       };
-// }
