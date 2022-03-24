@@ -330,7 +330,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             )
                           ],
                         )
-                      : Container(height: 0));
+                      : const Text(
+                          '',
+                          style: TextStyle(fontSize: 0),
+                        ));
             }),
           ),
         ],
