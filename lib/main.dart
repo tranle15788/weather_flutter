@@ -1,18 +1,17 @@
 import 'dart:io' show Platform;
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:desktop_window/desktop_window.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mccounting_text/mccounting_text.dart';
+import 'package:window_size/window_size.dart';
 import './data_weather.dart';
-import 'theme.dart' as Theme;
-import 'package:desktop_window/desktop_window.dart' as window_size;
+import 'theme.dart' as theme;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    window_size.DesktopWindow.setMinWindowSize(Size(375, 667));
+    setWindowMinSize(const Size(375, 667));
   }
+
   runApp(const MyApp());
 }
 
@@ -95,8 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                     colors: const [
-                                      Theme.Colors.primary,
-                                      Theme.Colors.blueSky,
+                                      theme.Colors.primary,
+                                      theme.Colors.blueSky,
                                     ],
                                     stops: [
                                       currentDayIndex == idx ? 0.0 : 1.0,
@@ -129,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
-              Platform.isLinux && Platform.isMacOS && Platform.isWindows
+              Platform.isLinux || Platform.isMacOS || Platform.isWindows
                   ? Positioned.fill(
                       child: Align(
                       alignment: Alignment.centerLeft,
@@ -142,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ))
                   : Container(),
-              Platform.isLinux && Platform.isMacOS && Platform.isWindows
+              Platform.isLinux || Platform.isMacOS || Platform.isWindows
                   ? Positioned.fill(
                       child: Align(
                       alignment: Alignment.centerRight,
@@ -172,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               text: TextSpan(
                                 text: '${weather.temperature}',
                                 style: const TextStyle(
-                                    color: Theme.Colors.primary,
+                                    color: theme.Colors.primary,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 65,
                                     height: 1.5),
@@ -190,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               weather.weatherStates,
                               style: const TextStyle(
                                   height: 1.3,
-                                  color: Theme.Colors.blueSky,
+                                  color: theme.Colors.blueSky,
                                   fontSize: 30),
                             ),
                             // Text Date
@@ -210,7 +209,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Theme.Colors.blueSky,
+                                    color: theme.Colors.blueSky,
                                     borderRadius: BorderRadius.circular(50),
                                   ),
                                   width: 90,
@@ -272,7 +271,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   width: 90,
                                   height: 150,
                                   decoration: BoxDecoration(
-                                    color: Theme.Colors.purple,
+                                    color: theme.Colors.purple,
                                     borderRadius: BorderRadius.circular(50),
                                   ),
                                   child: Column(
